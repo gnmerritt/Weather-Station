@@ -1,0 +1,15 @@
+[Unit]
+Description=Raspberry Pi Weather Station
+After=network.target
+StartLimitIntervalSec=600
+StartLimitBurst=3
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=30
+User=nathan
+ExecStart=python3 /home/nathan/sources/rpi-weather-station/gnm_weather_station.py
+
+[Install]
+WantedBy=multi-user.target
