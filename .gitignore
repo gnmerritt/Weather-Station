@@ -9,3 +9,5 @@ testing.py
 
 # Exclude .env
 *.env
+
+.python-version
