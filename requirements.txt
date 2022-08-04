@@ -2,3 +2,4 @@ python-dotenv
 gpiozero
 paho-mqtt
 RPi.bme280
+RPi.GPIO

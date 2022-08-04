@@ -46,6 +46,7 @@ def on_disconnect(client, userdata, rc) -> None:
     flag_connected = 0
 
 
+print(f"Attemping MQTT: {MQTT_USER} @ {MQTT_HOST}:{MQTT_PORT}")
 client = mqtt.Client("WX")
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
@@ -100,9 +101,6 @@ if __name__ == '__main__':
         # Get current system uptime
         sys_uptime = uptime()
 
-        # Debugging (used when testing and need to print variables)
-        #print(last_message, wind_speed, rainfall, wind_direction, humidity, pressure, ambient_temp, ground_temp, sys_uptime)
-
         # Create JSON dict for MQTT transmission
         send_msg = {
             'garage_humidity': humidity,
@@ -114,6 +112,7 @@ if __name__ == '__main__':
             'system_uptime': sys_uptime
         }
 
+        print(f"Got message: {send_msg}")
         # Convert message to json
         payload_sensors = json.dumps(send_msg)
 
