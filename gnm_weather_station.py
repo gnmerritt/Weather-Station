@@ -22,7 +22,7 @@ MQTT_PORT = int(os.environ.get('MQTT_PORT'))
 flag_connected = 0      # Loop flag for waiting to connect to MQTT broker
 
 # Constant variable definition
-MQTT_STATUS_TOPIC = os.environ.get('MQQT_STATUS_TOPIC', "raspberry/ws/status")
+MQTT_STATUS_TOPIC = os.environ.get('MQTT_STATUS_TOPIC', "raspberry/ws/status")
 MQTT_SENSORS_TOPIC = os.environ.get('MQTT_SENSORS_TOPIC', "raspberry/ws/sensors")
 READ_INTERVAL = int(os.environ.get('READ_INTERVAL', 5))
 
@@ -70,6 +70,46 @@ def celsius_to_f(temp_c: float) -> float:
 # Read CPU temp for future fan logic
 cpu = CPUTemperature()
 
+SENSORS = {
+    'outside_temp': {"device_class": "temperature",
+                     "name": "Ambient Temperature",
+                     "unit_of_measurement": "°F"},
+    'garage_temp': {"device_class": "temperature", "name": "Garage Temperature",
+                    "unit_of_measurement": "°F"},
+    'garage_humidity': {"device_class": "humidity", "name": "Garage Humidity",
+                        "unit_of_measurement": "%"},
+    'pressure': {"device_class": "pressure", "name": "Ambient Pressure",
+                 "unit_of_measurement": "mbar"},
+    'cpu_temp': {"device_class": "temperature",
+                 "name": "Banshee CPU Temperature",
+                 "unit_of_measurement": "°F"},
+}
+
+
+def send_mqtt_discovery(client) -> None:
+    for name, config in SENSORS.items():
+        obj_id = f"piws_{name}"
+        config_topic = f"homeassistant/sensor/piws/{obj_id}/config"
+
+        config['object_id'] = obj_id
+        config['availability'] = [{
+            'topic': MQTT_STATUS_TOPIC,
+            'payload_available': "Online",
+            'payload_not_available': "Offline",
+        }]
+        config['device'] = {
+            'name': 'Banshee Weather Station',
+            'identifiers': ['piws'],
+            'suggested_area': 'garage',
+        }
+        config['value_template'] = f"{{{{ value_json.{name} }}}}"
+        config['state_topic'] = MQTT_SENSORS_TOPIC
+        config['unique_id'] = f'banshee_{obj_id}'
+
+        client.publish(config_topic, json.dumps(config), qos=0, retain=True)
+        print(f"sent discovery for {name}")
+
+
 # Main loop
 if __name__ == '__main__':
     client.loop_start()
@@ -78,6 +118,8 @@ if __name__ == '__main__':
     while flag_connected == 0:
         print("Not connected. Waiting 1 second.")
         time.sleep(1)
+
+    send_mqtt_discovery(client)
 
     while True:
         # Record current date and time for message timestamp
@@ -128,6 +170,7 @@ if __name__ == '__main__':
         if to_sleep > 0:
             time.sleep(to_sleep)
 
+    client.publish(MQTT_STATUS_TOPIC, "Offline", qos=0)
     client.loop_stop()
     print("Loop Stopped.")
     client.disconnect()
