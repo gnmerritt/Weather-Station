@@ -89,8 +89,8 @@ if __name__ == '__main__':
         # and convert C readings to F
         humidity = round(humidity, 1)
         pressure = round(pressure, 1)
-        garage_temp_c = celsius_to_f(round(garage_temp, 1))
-        outside_temp_c = celsius_to_f(round(outside_temp, 1))
+        garage_temp_f = celsius_to_f(round(garage_temp, 1))
+        outside_temp_f = celsius_to_f(round(outside_temp, 1))
 
         cpu_temp = celsius_to_f(round(cpu.temperature, 1))
 
@@ -107,8 +107,8 @@ if __name__ == '__main__':
         send_msg = {
             'garage_humidity': humidity,
             'pressure': pressure,
-            'garage_temp': garage_temp_c,
-            'outside_temp': outside_temp_c,
+            'garage_temp': garage_temp_f,
+            'outside_temp': outside_temp_f,
             'last_message': last_message,
             'cpu_temp': cpu_temp,
             'system_uptime': sys_uptime
