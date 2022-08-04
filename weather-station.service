@@ -9,6 +9,7 @@ Type=simple
 Restart=always
 RestartSec=30
 User=nathan
+Group=i2c
 ExecStart=python3 /home/nathan/sources/rpi-weather-station/gnm_weather_station.py
 
 [Install]
