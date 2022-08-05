@@ -79,7 +79,7 @@ SENSORS = {
     'garage_humidity': {"device_class": "humidity", "name": "Garage Humidity",
                         "unit_of_measurement": "%"},
     'pressure': {"device_class": "pressure", "name": "Ambient Pressure",
-                 "unit_of_measurement": "mbar"},
+                 "unit_of_measurement": "hPa"},
     'cpu_temp': {"device_class": "temperature",
                  "name": "Banshee CPU Temperature",
                  "unit_of_measurement": "°F"},
