@@ -73,15 +73,20 @@ cpu = CPUTemperature()
 SENSORS = {
     'outside_temp': {"device_class": "temperature",
                      "name": "Ambient Temperature",
+                     "state_class": "measurement",
                      "unit_of_measurement": "°F"},
     'garage_temp': {"device_class": "temperature", "name": "Garage Temperature",
+                    "state_class": "measurement",
                     "unit_of_measurement": "°F"},
     'garage_humidity': {"device_class": "humidity", "name": "Garage Humidity",
+                        "state_class": "measurement",
                         "unit_of_measurement": "%"},
     'pressure': {"device_class": "pressure", "name": "Ambient Pressure",
+                 "state_class": "measurement",
                  "unit_of_measurement": "hPa"},
     'cpu_temp': {"device_class": "temperature",
                  "name": "Banshee CPU Temperature",
+                 "state_class": "measurement",
                  "unit_of_measurement": "°F"},
 }
 
